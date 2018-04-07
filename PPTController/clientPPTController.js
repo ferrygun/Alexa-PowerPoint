@@ -11,14 +11,6 @@ const WebSocket = require('ws');
 //const ws = new WebSocket("ws://localhost:3000/");
 const ws = new WebSocket("wss://fdwebsocket.herokuapp.com/");
 
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
-
-process.stdin.on('data', function(message) {
-  message = message.trim();
-  ws.send(message, console.log.bind(null, 'Sent : ', message));
-});
-
 ws.on('message', function(message) {
 	console.log('Received: ' + message);
 
@@ -52,4 +44,11 @@ ws.on('close', function(code) {
 
 ws.on('error', function(error) {
 	console.log('Error: ' + error.code);
+});
+
+
+ws.on('open', function open() {
+	setInterval(() => {
+		ws.send('PING', console.log.bind(null, 'Sent : ', 'PING'));
+	}, 1000);
 });
